@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom design tokens / effects used across the site. */
+@layer base {
+  body { font-family: 'Inter', system-ui, sans-serif; }
+}
+
+@layer components {
+  .glass { backdrop-filter: saturate(180%) blur(12px); }
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(37,99,235,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,.07) 1px, transparent 1px);
+    background-size: 38px 38px;
+  }
+  .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+  .card-hover:hover { transform: translateY(-6px); }
+}

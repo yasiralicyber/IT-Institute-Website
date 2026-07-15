@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+# Decoy paths - legitimate users and crawlers must not fetch these.
+Disallow: /internal/

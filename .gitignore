@@ -1,0 +1,27 @@
+# Secrets & local config
+/.env
+
+# Dev-only tooling (NOT needed on the server — CSS is pre-compiled)
+/composer.phar
+/dev/bin/
+/dev/php.ini
+/dev/pdfcal.php
+/dev/pdftest.php
+
+# Runtime / generated
+/storage/tmp/
+/storage/backups/
+/storage/templates/id-card-band.pdf
+/storage/templates/*.png
+*.log
+
+# Real student/user data — never committed (receipts, admission docs, DB records)
+/storage/uploads/
+/storage/database/
+
+# Personal local tool settings
+/.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db

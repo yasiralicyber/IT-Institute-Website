@@ -35,12 +35,13 @@ class CourseController extends Controller
 
         $slug = $this->uniqueSlug(slugify($title));
         $maxSort = (int) Database::scalar("SELECT COALESCE(MAX(sort),0) FROM courses");
+        $thumbnail = store_upload('thumbnail', 'courses', ['jpg', 'jpeg', 'png', 'webp'], 4_194_304);
         $id = Database::run(
-            "INSERT INTO courses (slug,title,subtitle,category,level,description,outcomes,price,accent,icon,sort,is_published)
-             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO courses (slug,title,subtitle,category,level,description,outcomes,price,accent,icon,thumbnail,sort,is_published)
+             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [$slug, $title, input('subtitle'), input('category'), input('level'),
              input('description'), json_encode(array_filter(array_map('trim', explode("\n", (string) input('outcomes'))))),
-             (int) input('price'), input('accent', '#2f5078') ?: '#2f5078', 'code',
+             (int) input('price'), input('accent', '#2f5078') ?: '#2f5078', 'code', $thumbnail,
              $maxSort + 1, input('is_published') ? 1 : 0]);
         flash('success', 'Course created. Now add chapters and lectures.');
         redirect('/courses/' . $id . '/edit');
@@ -69,11 +70,13 @@ class CourseController extends Controller
         Auth::requireAdmin();
         if (!csrf_verify(input('_csrf'))) { redirect('/courses'); }
         $id = (int) ($params['id'] ?? 0);
+        $cur = Database::first("SELECT thumbnail FROM courses WHERE id = ?", [$id]);
+        $thumbnail = store_upload('thumbnail', 'courses', ['jpg', 'jpeg', 'png', 'webp'], 4_194_304) ?: ($cur['thumbnail'] ?? null);
         Database::run(
-            "UPDATE courses SET title=?,subtitle=?,category=?,level=?,description=?,outcomes=?,price=?,accent=?,is_published=? WHERE id=?",
+            "UPDATE courses SET title=?,subtitle=?,category=?,level=?,description=?,outcomes=?,price=?,accent=?,thumbnail=?,is_published=? WHERE id=?",
             [input('title'), input('subtitle'), input('category'), input('level'), input('description'),
              json_encode(array_filter(array_map('trim', explode("\n", (string) input('outcomes'))))),
-             (int) input('price'), input('accent', '#2f5078') ?: '#2f5078', input('is_published') ? 1 : 0, $id]);
+             (int) input('price'), input('accent', '#2f5078') ?: '#2f5078', $thumbnail, input('is_published') ? 1 : 0, $id]);
         flash('success', 'Course updated.');
         redirect('/courses/' . $id . '/edit');
     }

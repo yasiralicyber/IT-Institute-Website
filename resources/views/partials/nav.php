@@ -1,13 +1,14 @@
 <?php
 $nav = [
-    '/about'     => 'About',
-    '/courses'   => 'Courses',
-    '/faculty'   => 'Faculty',
-    '/campus'    => 'Campus',
-    '/awards'    => 'Awards',
-    '/result'    => 'Result',
-    '/admission' => 'Admissions',
-    '/contact'   => 'Contact',
+    '/'           => 'Home',
+    '/about'      => 'About',
+    '/courses'    => 'Courses',
+    '/faculty'    => 'Faculty',
+    '/activities' => 'Activities',
+    '/awards'     => 'Awards',
+    '/result'     => 'Result',
+    '/admission'  => 'Admissions',
+    '/contact'    => 'Contact',
 ];
 $inst = config('institute');
 $current = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

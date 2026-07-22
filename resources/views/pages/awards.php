@@ -15,13 +15,13 @@ include BASE_PATH . '/resources/views/partials/page-header.php';
         <?php foreach ($awards as $a): ?>
         <div class="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-xl dark:border-white/10 dark:bg-slate-900/60 sm:flex-row" data-reveal>
             <div class="relative h-48 overflow-hidden sm:h-auto sm:w-2/5">
-                <img src="<?= asset('img/' . $a['image']) ?>" alt="<?= e($a['title']) ?>" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                <img src="<?= url('/award-image/' . $a['id']) ?>" alt="<?= e($a['title']) ?>" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                 <span class="absolute left-3 top-3 rounded-lg bg-gold-500 px-3 py-1 text-sm font-black text-brand-950"><?= e($a['year']) ?></span>
             </div>
             <div class="flex flex-1 flex-col justify-center p-6">
                 <span class="text-xs font-bold uppercase tracking-wider text-gold-600"><?= e($a['org']) ?></span>
                 <h3 class="mt-2 text-xl font-black text-slate-900 dark:text-white"><?= e($a['title']) ?></h3>
-                <p class="mt-3 text-sm text-slate-600 dark:text-slate-300"><?= e($a['desc']) ?></p>
+                <p class="mt-3 text-sm text-slate-600 dark:text-slate-300"><?= e($a['description']) ?></p>
             </div>
         </div>
         <?php endforeach; ?>

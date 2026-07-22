@@ -37,12 +37,15 @@ $I = [
   'shield'=> 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
   'lock' => 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
   'guard'=> 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6-6a3 3 0 11-3 3',
+  'trophy'=> 'M5 3h14M5 3v4a7 7 0 007 7 7 7 0 007-7V3M5 3H3v2a4 4 0 004 4m12-6h2v2a4 4 0 01-4 4m-5 4v4m-4 0h8',
+  'image'=> 'M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z',
 ];
 $groups = [
   'Main' => [['/','Dashboard',$I['dash'],null],['/analytics','Analytics',$I['chart'],null]],
   'Learning' => [['/courses','Courses',$I['book'],null],['/learning','Learning Tools',$I['beaker'],null],['/reviews','Reviews',$I['star'],$pendingReviews],['/community','Community',$I['chat'],null],['/projects','Projects',$I['proj'],$pendingProjects],['/acknowledgments','Acknowledgments',$I['check'],null]],
   'Students' => [['/students','Students',$I['users'],null],['/admissions','Admissions',$I['doc'],$newAdmissions],['/risk','At-Risk Students',$I['risk'],$riskCount],['/purchases','Online Payments',$I['check'],$pendingCount]],
   'Institute' => [['/batches','Batches',$I['grid'],null],['/staff','Staff',$I['users'],null],['/classrooms','Classrooms',$I['room'],null],['/attendance','Attendance',$I['cal'],null],['/timetable','Timetable',$I['clock'],null]],
+  'Website Content' => [['/hero-slides','Hero Images',$I['image'],null],['/awards','Awards',$I['trophy'],null],['/activities','Activities',$I['image'],null]],
   'Finance' => [['/fees','Fees',$I['money'],null],['/expenses','Expenses',$I['doc'],null],['/payroll','Payroll',$I['users'],null],['/daybook','Day Book',$I['save'],null],['/fee-plans','Fee Plans',$I['doc'],null]],
   'Exams & Results' => [['/test-marks','Test Marks',$I['star'],null],['/results','Results',$I['doc'],null],['/certificates','Certificate Registry',$I['check'],null],['/grading-schemes','Grading Schemes',$I['star'],null],['/appeals','Score Appeals',$I['chat'],$openAppeals ?? null],['/exam-violations','Exam Integrity',$I['shield'],null]],
   'Communication' => [['/events','Events & News',$I['cal'],null],['/notices','Notices',$I['bell'],null]],

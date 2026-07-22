@@ -1,7 +1,7 @@
 <?php
-/** @var array $facilities @var array $gallery */
+/** @var array $facilities @var array $categories */
 $inst = config('institute');
-$ph_title = 'Campus & Facilities'; $ph_sub = 'Modern labs, smart classrooms and the right environment to learn and grow.'; $ph_img = 'photos/campus-2.jpg';
+$ph_title = 'Activities'; $ph_sub = 'Sports, functions, tours and a look inside our campus life.'; $ph_img = 'photos/campus-2.jpg';
 include BASE_PATH . '/resources/views/partials/page-header.php';
 ?>
 
@@ -26,20 +26,27 @@ include BASE_PATH . '/resources/views/partials/page-header.php';
     </div>
 </section>
 
-<!-- Gallery / Tour -->
+<!-- Gallery / Activities -->
 <section class="bg-slate-50 py-20 dark:bg-slate-900/40">
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
         <div class="mx-auto max-w-2xl text-center" data-reveal>
-            <span class="text-sm font-bold uppercase tracking-[0.2em] text-gold-600">Photo Tour</span>
-            <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl">Inside Our Campus</h2>
+            <span class="text-sm font-bold uppercase tracking-[0.2em] text-gold-600">Photo Gallery</span>
+            <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl">Sports, Functions &amp; Campus Activities</h2>
         </div>
-        <div class="mt-12 columns-2 gap-4 sm:columns-3 lg:columns-4 [&>a]:mb-4">
-            <?php foreach ($gallery as $i => $g): ?>
-            <a href="<?= asset('img/' . $g) ?>" target="_blank" class="group block break-inside-avoid overflow-hidden rounded-2xl" data-reveal>
-                <img src="<?= asset('img/' . $g) ?>" alt="Campus photo" loading="lazy" class="w-full object-cover transition duration-500 group-hover:scale-105">
-            </a>
-            <?php endforeach; ?>
-        </div>
+
+        <?php foreach ($categories as $cat): ?>
+            <?php if (empty($cat['photos'])) continue; ?>
+            <div class="mt-14" data-reveal>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white"><?= e($cat['name']) ?></h3>
+                <div class="mt-6 columns-2 gap-4 sm:columns-3 lg:columns-4 [&>a]:mb-4">
+                    <?php foreach ($cat['photos'] as $p): ?>
+                    <a href="<?= url('/activity-image/' . $p['id']) ?>" target="_blank" class="group block break-inside-avoid overflow-hidden rounded-2xl" data-reveal>
+                        <img src="<?= url('/activity-image/' . $p['id']) ?>" alt="<?= e($p['caption'] ?: $cat['name']) ?>" loading="lazy" class="w-full object-cover transition duration-500 group-hover:scale-105">
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </section>
 

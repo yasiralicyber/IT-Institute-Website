@@ -153,6 +153,57 @@ foreach (\App\Content::faculty() as $f) {
     );
 }
 
+// ---- Website content (CMS: hero slides, awards, activity gallery) ---------
+// Same copy+insert shape as database/seed_website_content_from_static.php,
+// inlined here for fresh local/dev installs (this file is documented as
+// fresh-install-only, so no "already populated" guards are needed).
+function seedCopyStatic(string $relSrc, string $subdir, string $destName): ?string
+{
+    $src = BASE_PATH . '/public/assets/img/' . $relSrc;
+    if (!is_file($src)) { return null; }
+    $dir = BASE_PATH . '/storage/uploads/' . $subdir;
+    if (!is_dir($dir)) { @mkdir($dir, 0775, true); }
+    $dest = $subdir . '/' . $destName;
+    @copy($src, BASE_PATH . '/storage/uploads/' . $dest);
+    return $dest;
+}
+
+$heroSource = [
+    ['img/photos/hero.jpg','Students learning at IT Training Institute'],
+    ['img/photos/lab.jpg','Hands-on computer lab'],
+    ['img/photos/campus-1.jpg','Our campus'],
+    ['img/photos/campus-2.jpg','Classrooms'],
+    ['img/photos/campus-3.jpg','Training in progress'],
+    ['img/photos/campus-4.jpg','Practical labs'],
+    ['img/photos/campus-5.jpg','Student activities'],
+    ['img/photos/campus-6.jpg','Institute facilities'],
+];
+$heroSort = 0;
+foreach ($heroSource as [$rel, $alt]) {
+    $heroSort++;
+    $stored = seedCopyStatic(ltrim(str_replace('img/', '', $rel), '/'), 'hero', 'seed-' . $heroSort . '.jpg');
+    Database::run("INSERT INTO hero_slides (image,alt,sort,is_published) VALUES (?,?,?,1)", [$stored, $alt, $heroSort]);
+}
+
+$awardSort = 0;
+foreach (\App\Content::awards() as $a) {
+    $awardSort++;
+    $stored = seedCopyStatic($a['image'], 'awards', 'seed-' . $awardSort . '.jpg');
+    Database::run("INSERT INTO awards (year,title,org,description,image,sort,is_published) VALUES (?,?,?,?,?,?,1)",
+        [$a['year'], $a['title'], $a['org'], $a['desc'], $stored, $awardSort]);
+}
+
+$campusTourCatId = (int) Database::run("INSERT INTO activity_categories (name,sort,is_published) VALUES (?,?,1)", ['Campus Tour', 1]);
+$activitySort = 0;
+foreach (\App\Content::gallery() as $rel) {
+    $activitySort++;
+    $stored = seedCopyStatic($rel, 'activities', 'seed-' . $activitySort . '.jpg');
+    Database::run("INSERT INTO activity_photos (category_id,image,caption,sort,is_published) VALUES (?,?,?,?,1)",
+        [$campusTourCatId, $stored, null, $activitySort]);
+}
+
+echo "  ✓ website content seeded (" . count($heroSource) . " hero slides, " . count(\App\Content::awards()) . " awards, " . count(\App\Content::gallery()) . " activity photos)\n";
+
 // A demo batch for CCNA assigned to room A + lead instructor.
 $ccnaId = Database::scalar("SELECT id FROM courses WHERE slug='ccna-200-301'");
 $roomA  = Database::scalar("SELECT id FROM classrooms ORDER BY id LIMIT 1");

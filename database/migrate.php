@@ -795,6 +795,9 @@ $tables['import_sessions'] = "
     created_at $TS
 ";
 
+// ---- Website content (CMS: hero slides, awards, activity gallery) ----
+$tables += require __DIR__ . '/schema/website_content.php';
+
 // MySQL cannot index a TEXT/BLOB column without a key length. Convert every
 // TEXT column that is UNIQUE (inline) or referenced by a UNIQUE(...) constraint
 // into VARCHAR(191) — long-content TEXT columns (bodies, JSON, notes) stay TEXT.

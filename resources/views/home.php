@@ -4,30 +4,16 @@ use App\Content;
 $inst = config('institute');
 $instStats = Content::stats();
 $faculty = array_slice(Content::faculty(), 0, 3);
-$awards = array_slice(Content::awards(), 0, 4);
 $values = Content::values();
 $gallery = Content::gallery();
 ?>
 
 <!-- ===== HERO ===== -->
-<?php
-// Big hero image carousel — slides these images behind the headline.
-$heroSlides = [
-    ['img/photos/hero.jpg',    'Students learning at IT Training Institute'],
-    ['img/photos/lab.jpg',     'Hands-on computer lab'],
-    ['img/photos/campus-1.jpg','Our campus'],
-    ['img/photos/campus-2.jpg','Classrooms'],
-    ['img/photos/campus-3.jpg','Training in progress'],
-    ['img/photos/campus-4.jpg','Practical labs'],
-    ['img/photos/campus-5.jpg','Student activities'],
-    ['img/photos/campus-6.jpg','Institute facilities'],
-];
-?>
 <section id="heroCarousel" class="relative isolate overflow-hidden bg-brand-950">
     <!-- Sliding image layers (cross-fade) -->
     <div class="absolute inset-0">
         <?php foreach ($heroSlides as $i => $sl): ?>
-        <img src="<?= asset($sl[0]) ?>" alt="<?= e($sl[1]) ?>" loading="<?= $i === 0 ? 'eager' : 'lazy' ?>"
+        <img src="<?= url('/hero-image/' . $sl['id']) ?>" alt="<?= e($sl['alt'] ?: 'IT Training Institute') ?>" loading="<?= $i === 0 ? 'eager' : 'lazy' ?>"
              class="hero-slide absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-in-out <?= $i === 0 ? 'opacity-100 z-[1]' : 'opacity-0' ?>"
              data-slide="<?= $i ?>">
         <?php endforeach; ?>
@@ -206,11 +192,11 @@ $heroSlides = [
             <span class="text-sm font-bold uppercase tracking-[0.2em] text-gold-600">Take a Look</span>
             <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl">Our Campus & Facilities</h2>
         </div>
-        <a href="<?= url('/campus') ?>" class="rounded-xl bg-brand-700 px-5 py-2.5 font-bold text-white hover:bg-brand-800">Tour the campus →</a>
+        <a href="<?= url('/activities') ?>" class="rounded-xl bg-brand-700 px-5 py-2.5 font-bold text-white hover:bg-brand-800">Tour the campus →</a>
     </div>
     <div class="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <?php foreach (array_slice($gallery, 0, 8) as $i => $g): ?>
-        <a href="<?= url('/campus') ?>" class="group relative overflow-hidden rounded-2xl <?= $i === 0 ? 'col-span-2 row-span-2' : '' ?>" data-reveal>
+        <a href="<?= url('/activities') ?>" class="group relative overflow-hidden rounded-2xl <?= $i === 0 ? 'col-span-2 row-span-2' : '' ?>" data-reveal>
             <img src="<?= asset('img/' . $g) ?>" alt="Campus" loading="lazy" class="h-full w-full <?= $i === 0 ? 'min-h-[16rem]' : 'h-40 sm:h-44' ?> object-cover transition duration-500 group-hover:scale-110">
             <div class="absolute inset-0 bg-brand-950/0 transition group-hover:bg-brand-950/30"></div>
         </a>
@@ -229,7 +215,7 @@ $heroSlides = [
             <?php foreach ($awards as $a): ?>
             <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-900" data-reveal>
                 <div class="relative h-36 overflow-hidden">
-                    <img src="<?= asset('img/' . $a['image']) ?>" alt="<?= e($a['title']) ?>" loading="lazy" class="h-full w-full object-cover">
+                    <img src="<?= url('/award-image/' . $a['id']) ?>" alt="<?= e($a['title']) ?>" loading="lazy" class="h-full w-full object-cover">
                     <span class="absolute left-3 top-3 rounded-lg bg-gold-500 px-2.5 py-1 text-xs font-black text-brand-950"><?= e($a['year']) ?></span>
                 </div>
                 <div class="p-5">

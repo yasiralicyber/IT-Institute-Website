@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Core\View;
 use App\Models\Course;
 
@@ -35,5 +36,18 @@ class CourseController extends Controller
             'freeCount'   => Course::freeLectureCount($courseId),
             'totalCount'  => Course::lectureCount($courseId),
         ]);
+    }
+
+    /** Stream an admin-uploaded course thumbnail (public — shown to anonymous visitors on course cards/pages). */
+    public function thumbnail(array $params): void
+    {
+        $row = Database::first("SELECT thumbnail FROM courses WHERE id=?", [(int) ($params['id'] ?? 0)]);
+        $path = $row && $row['thumbnail'] ? BASE_PATH . '/storage/uploads/' . $row['thumbnail'] : '';
+        if (!$path || !is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
     }
 }

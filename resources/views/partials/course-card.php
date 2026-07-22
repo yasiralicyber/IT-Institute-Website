@@ -3,7 +3,9 @@
 $accent = $course['accent'] ?: '#274a70';
 $mins = (int) $course['total_minutes'];
 $imgFile = '/courses/' . $course['slug'] . '.jpg';
-$img = asset('img' . (is_file(BASE_PATH . '/public/assets/img' . $imgFile) ? $imgFile : '/courses/_default.jpg'));
+$img = !empty($course['thumbnail'])
+    ? url('/course-thumbnail/' . $course['id'])
+    : asset('img' . (is_file(BASE_PATH . '/public/assets/img' . $imgFile) ? $imgFile : '/courses/_default.jpg'));
 ?>
 <a href="<?= url('/courses/' . $course['slug']) ?>"
    data-reveal

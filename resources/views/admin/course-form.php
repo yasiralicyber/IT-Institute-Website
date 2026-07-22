@@ -9,11 +9,18 @@ function fld($c, $k) { return $c[$k] ?? ''; }
 
 <div class="mt-4 grid gap-6 lg:grid-cols-<?= $isEdit ? '5' : '1' ?>">
     <!-- Course details -->
-    <form action="<?= $action ?>" method="POST" class="<?= $isEdit ? 'lg:col-span-2' : '' ?> space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-900">
+    <form action="<?= $action ?>" method="POST" enctype="multipart/form-data" class="<?= $isEdit ? 'lg:col-span-2' : '' ?> space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-slate-900">
         <?= csrf_field() ?>
         <h2 class="text-lg font-bold text-slate-900 dark:text-white">Course details</h2>
         <div><label class="mb-1 block text-sm font-bold text-slate-700 dark:text-slate-200">Title *</label>
             <input name="title" required value="<?= e(fld($course, 'title')) ?>" class="w-full rounded-xl border-slate-300 bg-white px-4 py-2.5 dark:border-white/15 dark:bg-slate-800 dark:text-white"></div>
+        <div><label class="mb-1 block text-sm font-bold text-slate-700 dark:text-slate-200">Thumbnail</label>
+            <?php if ($isEdit && !empty($course['thumbnail'])): ?>
+                <img src="/course-thumbnail/<?= (int) $course['id'] ?>" alt="" class="mb-2 h-24 w-40 rounded-xl object-cover ring-1 ring-slate-200">
+            <?php endif; ?>
+            <input type="file" name="thumbnail" accept="image/*" class="w-full text-sm">
+            <p class="mt-1 text-xs text-slate-400">Leave blank to keep the current course image.</p>
+        </div>
         <div><label class="mb-1 block text-sm font-bold text-slate-700 dark:text-slate-200">Subtitle</label>
             <input name="subtitle" value="<?= e(fld($course, 'subtitle')) ?>" class="w-full rounded-xl border-slate-300 bg-white px-4 py-2.5 dark:border-white/15 dark:bg-slate-800 dark:text-white"></div>
         <div class="grid grid-cols-2 gap-3">

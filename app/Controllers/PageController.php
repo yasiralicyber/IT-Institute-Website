@@ -20,21 +20,73 @@ class PageController extends Controller
         ]);
     }
 
-    public function campus(): void
+    public function activities(): void
     {
-        $this->view('pages/campus', [
-            'title'      => 'Campus & Facilities - ' . config('app.name'),
+        $categories = Database::all("SELECT * FROM activity_categories WHERE is_published=1 ORDER BY sort, id");
+        foreach ($categories as &$cat) {
+            $cat['photos'] = Database::all("SELECT * FROM activity_photos WHERE category_id=? AND is_published=1 ORDER BY sort, id", [$cat['id']]);
+        }
+        unset($cat);
+        $this->view('pages/activities', [
+            'title'      => 'Activities & Campus - ' . config('app.name'),
             'facilities' => \App\Content::facilities(),
-            'gallery'    => \App\Content::gallery(),
+            'categories' => $categories,
         ]);
     }
 
+    /** Old /campus URL — permanent redirect to the renamed Activities page. */
+    public function campusRedirect(): void
+    {
+        http_response_code(301);
+        redirect('/activities');
+    }
+
+    /** Stream a published activity photo (public). */
+    public function activityImage(array $params): void
+    {
+        $row = Database::first("SELECT image FROM activity_photos WHERE id=? AND is_published=1", [(int) ($params['id'] ?? 0)]);
+        $path = $row && $row['image'] ? BASE_PATH . '/storage/uploads/' . $row['image'] : '';
+        if (!$path || !is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
+    }
+
+    /** Public awards listing, DB-driven. */
     public function awards(): void
     {
         $this->view('pages/awards', [
             'title'  => 'Awards & Achievements - ' . config('app.name'),
-            'awards' => \App\Content::awards(),
+            'awards' => Database::all("SELECT * FROM awards WHERE is_published=1 ORDER BY sort"),
         ]);
+    }
+
+    /** Stream a published award image (public). */
+    public function awardImage(array $params): void
+    {
+        $row = Database::first("SELECT image FROM awards WHERE id = ? AND is_published = 1", [(int) ($params['id'] ?? 0)]);
+        $path = $row && $row['image'] ? BASE_PATH . '/storage/uploads/' . $row['image'] : '';
+        if (!$path || !is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
+    }
+
+    /** Stream a published hero-slide image (public, homepage carousel). */
+    public function heroImage(array $params): void
+    {
+        $row = Database::first("SELECT image FROM hero_slides WHERE id=? AND is_published=1", [(int) ($params['id'] ?? 0)]);
+        $path = $row && $row['image'] ? BASE_PATH . '/storage/uploads/' . $row['image'] : '';
+        if (!$path || !is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
     }
 
     public function playground(): void

@@ -27,10 +27,12 @@ class HomeController extends Controller
         );
 
         $this->view('home', [
-            'title'   => config('app.name') . ' - IT Courses in Kumber Maidan',
-            'courses' => $courses,
-            'stats'   => $stats,
-            'reviews' => $reviews,
+            'title'      => config('app.name') . ' - IT Courses in Kumber Maidan',
+            'courses'    => $courses,
+            'stats'      => $stats,
+            'reviews'    => $reviews,
+            'heroSlides' => Database::all("SELECT * FROM hero_slides WHERE is_published=1 ORDER BY sort, id"),
+            'awards'     => Database::all("SELECT * FROM awards WHERE is_published=1 ORDER BY sort, id LIMIT 4"),
         ]);
     }
 }

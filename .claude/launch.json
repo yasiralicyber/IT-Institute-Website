@@ -4,8 +4,14 @@
     {
       "name": "itti-site",
       "runtimeExecutable": "C:\\Users\\k  H  a  N\\AppData\\Local\\Microsoft\\WinGet\\Packages\\PHP.PHP.8.3_Microsoft.Winget.Source_8wekyb3d8bbwe\\php.exe",
-      "runtimeArgs": ["-c", "G:\\IT Training\\dev\\php.ini", "-S", "127.0.0.1:8090", "-t", "G:\\IT Training\\public", "G:\\IT Training\\public\\router-dev.php"],
+      "runtimeArgs": ["-c", "N:\\IT Training\\dev\\php.ini", "-S", "127.0.0.1:8090", "-t", "N:\\IT Training\\public", "N:\\IT Training\\public\\router-dev.php"],
       "port": 8090
+    },
+    {
+      "name": "itti-admin",
+      "runtimeExecutable": "C:\\Users\\k  H  a  N\\AppData\\Local\\Microsoft\\WinGet\\Packages\\PHP.PHP.8.3_Microsoft.Winget.Source_8wekyb3d8bbwe\\php.exe",
+      "runtimeArgs": ["-c", "N:\\IT Training\\dev\\php.ini", "-S", "127.0.0.1:8091", "-t", "N:\\IT Training\\admin", "N:\\IT Training\\admin\\router-dev.php"],
+      "port": 8091
     }
   ]
 }

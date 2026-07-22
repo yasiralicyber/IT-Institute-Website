@@ -40,6 +40,9 @@ use App\Controllers\Admin\EventController;
 use App\Controllers\Admin\OpsController;
 use App\Controllers\Admin\WorkflowController;
 use App\Controllers\Admin\AnalyticsController;
+use App\Controllers\Admin\AwardController;
+use App\Controllers\Admin\ActivityController;
+use App\Controllers\Admin\HeroSlideController;
 
 /** @var \App\Core\Router $router */
 
@@ -247,6 +250,33 @@ $router->post('/events/{id}/delete',[EventController::class, 'destroy']);
 $router->get('/notices',            [NoticeController::class, 'index']);
 $router->post('/notices',           [NoticeController::class, 'store']);
 $router->post('/notices/{id}/delete',[NoticeController::class, 'destroy']);
+
+// ---- Website Content: Hero Images ----
+$router->get('/hero-slides',              [HeroSlideController::class, 'index']);
+$router->post('/hero-slides',             [HeroSlideController::class, 'store']);
+$router->post('/hero-slides/{id}',        [HeroSlideController::class, 'update']);
+$router->post('/hero-slides/{id}/delete', [HeroSlideController::class, 'destroy']);
+$router->post('/hero-slides/{id}/move',   [HeroSlideController::class, 'move']);
+
+// ---- Website Content: Awards ----
+$router->get('/awards',              [AwardController::class, 'index']);
+$router->get('/awards/create',       [AwardController::class, 'create']);
+$router->post('/awards',             [AwardController::class, 'store']);
+$router->get('/awards/{id}/edit',    [AwardController::class, 'edit']);
+$router->post('/awards/{id}',        [AwardController::class, 'update']);
+$router->post('/awards/{id}/delete', [AwardController::class, 'destroy']);
+$router->post('/awards/{id}/move',   [AwardController::class, 'move']);
+
+// ---- Website Content: Activities & Categories ----
+$router->get('/activities',                   [ActivityController::class, 'index']);
+$router->post('/activities',                  [ActivityController::class, 'store']);
+$router->post('/activities/{id}',             [ActivityController::class, 'update']);
+$router->post('/activities/{id}/delete',      [ActivityController::class, 'destroy']);
+$router->post('/activities/{id}/move',        [ActivityController::class, 'move']);
+$router->get('/activities/{id}',              [ActivityController::class, 'show']);
+$router->post('/activities/{id}/photos',      [ActivityController::class, 'storePhoto']);
+$router->post('/activity-photos/{id}/delete', [ActivityController::class, 'destroyPhoto']);
+$router->post('/activity-photos/{id}/move',   [ActivityController::class, 'movePhoto']);
 
 // ---- Settings ----
 $router->get('/settings',              [SettingController::class, 'index']);

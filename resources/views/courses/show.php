@@ -5,7 +5,8 @@ $inst = config('institute');
 ?>
 <!-- HERO -->
 <section class="relative isolate overflow-hidden text-white">
-    <img src="<?= asset('img/courses/' . $course['slug'] . '.jpg') ?>" alt="" class="absolute inset-0 h-full w-full object-cover opacity-30">
+    <?php $heroImg = !empty($course['thumbnail']) ? url('/course-thumbnail/' . $course['id']) : asset('img/courses/' . $course['slug'] . '.jpg'); ?>
+    <img src="<?= e($heroImg) ?>" alt="" class="absolute inset-0 h-full w-full object-cover opacity-30">
     <div class="absolute inset-0" style="background:linear-gradient(135deg,<?= e($accent) ?>e6,#091627f2)"></div>
     <div class="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-3">
         <div class="lg:col-span-2">

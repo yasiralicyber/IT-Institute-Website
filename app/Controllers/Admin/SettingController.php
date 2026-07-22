@@ -9,6 +9,8 @@ class SettingController extends Controller
 {
     private array $keys = [
         'hero_title', 'hero_subtitle',
+        'stat1_value', 'stat1_label', 'stat2_value', 'stat2_label',
+        'stat3_value', 'stat3_label', 'stat4_value', 'stat4_label',
         'pay_bank', 'pay_title', 'pay_number', 'pay_note',
         'inst_phone', 'inst_whatsapp', 'inst_email', 'inst_facebook', 'inst_youtube', 'inst_map',
         'policy_refund', 'policy_certificate', 'policy_support', 'policy_equipment', 'policy_delivery',
@@ -45,6 +47,8 @@ class SettingController extends Controller
         foreach ($this->keys as $k) {
             $this->put($k, trim((string) input($k, '')));
         }
+        $logo = store_upload('site_logo', 'branding', ['jpg', 'jpeg', 'png', 'webp'], 2_097_152);
+        if ($logo) { $this->put('site_logo', $logo); }
         audit('settings', 'settings', null, 'Updated site settings');
         flash('success', 'Settings saved. Changes are live on the website.');
         redirect('/settings');

@@ -202,7 +202,15 @@ foreach (\App\Content::gallery() as $rel) {
         [$campusTourCatId, $stored, null, $activitySort]);
 }
 
-echo "  ✓ website content seeded (" . count($heroSource) . " hero slides, " . count(\App\Content::awards()) . " awards, " . count(\App\Content::gallery()) . " activity photos)\n";
+$facilitySort = 0;
+foreach (\App\Content::facilities() as $f) {
+    $facilitySort++;
+    $stored = seedCopyStatic($f['image'], 'facilities', 'seed-' . $facilitySort . '.jpg');
+    Database::run("INSERT INTO facilities (title,description,image,sort,is_published) VALUES (?,?,?,?,1)",
+        [$f['title'], $f['desc'], $stored, $facilitySort]);
+}
+
+echo "  ✓ website content seeded (" . count($heroSource) . " hero slides, " . count(\App\Content::awards()) . " awards, " . count(\App\Content::gallery()) . " activity photos, " . count(\App\Content::facilities()) . " facilities)\n";
 
 // A demo batch for CCNA assigned to room A + lead instructor.
 $ccnaId = Database::scalar("SELECT id FROM courses WHERE slug='ccna-200-301'");

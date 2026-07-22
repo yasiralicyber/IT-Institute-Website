@@ -46,7 +46,7 @@ $bottomNav = ['/dashboard', '/my-courses', '/my-results', '/achievements', '/com
         <!-- Logo -->
         <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/10">
             <a href="<?= url('/') ?>" class="flex items-center gap-2.5">
-                <span class="flex h-10 w-10 flex-none items-center justify-center overflow-hidden rounded-lg bg-white p-0.5 ring-1 ring-black/5"><img src="<?= asset('img/logo.jpg') ?>" alt="ITTI" class="h-full w-full object-contain"></span>
+                <span class="flex h-10 w-10 flex-none items-center justify-center overflow-hidden rounded-lg bg-white p-0.5 ring-1 ring-black/5"><img src="<?= url('/site-logo') ?>" alt="ITTI" class="h-full w-full object-contain"></span>
                 <span class="text-sm font-extrabold leading-tight text-slate-900 dark:text-white">IT Training<br><span class="text-[10px] font-semibold uppercase tracking-widest text-brand-600">Kumber Maidan</span></span>
             </a>
             <!-- Close button (mobile only) -->

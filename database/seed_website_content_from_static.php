@@ -74,4 +74,18 @@ if ((int) Database::scalar("SELECT COUNT(*) FROM activity_categories") > 0) {
     echo "  ✓ activity_photos imported (" . count(\App\Content::gallery()) . ") under category 'Campus Tour'\n";
 }
 
+// ---- Facilities ----
+if ((int) Database::scalar("SELECT COUNT(*) FROM facilities") > 0) {
+    echo "facilities already populated, skipping.\n";
+} else {
+    $sort = 0;
+    foreach (\App\Content::facilities() as $f) {
+        $sort++;
+        $stored = copyStatic($f['image'], 'facilities', 'seed-' . $sort . '.jpg');
+        Database::run("INSERT INTO facilities (title,description,image,sort,is_published) VALUES (?,?,?,?,1)",
+            [$f['title'], $f['desc'], $stored, $sort]);
+    }
+    echo "  ✓ facilities imported (" . count(\App\Content::facilities()) . ")\n";
+}
+
 echo "Static-content import complete.\n";

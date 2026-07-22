@@ -43,6 +43,7 @@ use App\Controllers\Admin\AnalyticsController;
 use App\Controllers\Admin\AwardController;
 use App\Controllers\Admin\ActivityController;
 use App\Controllers\Admin\HeroSlideController;
+use App\Controllers\Admin\FacilityController;
 
 /** @var \App\Core\Router $router */
 
@@ -266,6 +267,13 @@ $router->get('/awards/{id}/edit',    [AwardController::class, 'edit']);
 $router->post('/awards/{id}',        [AwardController::class, 'update']);
 $router->post('/awards/{id}/delete', [AwardController::class, 'destroy']);
 $router->post('/awards/{id}/move',   [AwardController::class, 'move']);
+
+// ---- Website Content: Facilities ----
+$router->get('/facilities',              [FacilityController::class, 'index']);
+$router->post('/facilities',             [FacilityController::class, 'store']);
+$router->post('/facilities/{id}',        [FacilityController::class, 'update']);
+$router->post('/facilities/{id}/delete', [FacilityController::class, 'destroy']);
+$router->post('/facilities/{id}/move',   [FacilityController::class, 'move']);
 
 // ---- Website Content: Activities & Categories ----
 $router->get('/activities',                   [ActivityController::class, 'index']);

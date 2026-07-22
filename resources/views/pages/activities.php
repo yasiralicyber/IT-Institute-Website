@@ -15,11 +15,11 @@ include BASE_PATH . '/resources/views/partials/page-header.php';
         <?php foreach ($facilities as $f): ?>
         <div class="group overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-900/60" data-reveal>
             <div class="h-48 overflow-hidden">
-                <img src="<?= asset('img/' . $f['image']) ?>" alt="<?= e($f['title']) ?>" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                <img src="<?= $f['image'] ? url('/facility-image/' . $f['id']) : asset('img/photos/about.jpg') ?>" alt="<?= e($f['title']) ?>" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
             </div>
             <div class="p-5">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white"><?= e($f['title']) ?></h3>
-                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400"><?= e($f['desc']) ?></p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400"><?= e($f['description']) ?></p>
             </div>
         </div>
         <?php endforeach; ?>

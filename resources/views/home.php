@@ -2,10 +2,13 @@
 /** @var array $courses @var array $stats @var array $reviews */
 use App\Content;
 $inst = config('institute');
-$instStats = Content::stats();
-$faculty = array_slice(Content::faculty(), 0, 3);
+$instStats = [
+    [setting('stat1_value', '10+'), setting('stat1_label', 'Years of Excellence')],
+    [setting('stat2_value', '1,200+'), setting('stat2_label', 'Students Trained')],
+    [setting('stat3_value', '9'), setting('stat3_label', 'Professional Courses')],
+    [setting('stat4_value', '95%'), setting('stat4_label', 'Course Satisfaction')],
+];
 $values = Content::values();
-$gallery = Content::gallery();
 ?>
 
 <!-- ===== HERO ===== -->
@@ -27,11 +30,19 @@ $gallery = Content::gallery();
                 <span class="flex h-2 w-2 rounded-full bg-gold-400"></span> Admissions Open 2026 · Kumber Maidan
             </span>
             <h1 class="mt-6 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-7xl">
-                Shape Your Future in <span class="text-gold-400">Information Technology</span>
+                <?php if (setting('hero_title', '') !== ''): ?>
+                    <?= e(setting('hero_title', '')) ?>
+                <?php else: ?>
+                    Shape Your Future in <span class="text-gold-400">Information Technology</span>
+                <?php endif; ?>
             </h1>
+            <?php if (setting('hero_subtitle', '') !== ''): ?>
+            <p class="mt-6 max-w-2xl text-lg text-brand-100 sm:text-xl"><?= e(setting('hero_subtitle', '')) ?></p>
+            <?php else: ?>
             <p class="mt-6 max-w-2xl text-lg text-brand-100 sm:text-xl">
                 A leading institute for <strong class="text-white">Networking, Cyber Security & Programming</strong> in Kumber Maidan. Learn from certified instructors, train in real labs, and earn verifiable certificates - with the first 5 lessons of every course free.
             </p>
+            <?php endif; ?>
             <div class="mt-8 flex flex-wrap gap-4">
                 <a href="<?= url('/admission') ?>" class="rounded-xl bg-gold-500 px-7 py-4 text-base font-bold text-brand-950 shadow-xl shadow-gold-500/30 transition hover:bg-gold-400">Apply for Admission</a>
                 <a href="<?= url('/courses') ?>" class="rounded-xl border border-white/25 bg-white/5 px-7 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white/10">Explore Courses</a>
@@ -171,13 +182,17 @@ $gallery = Content::gallery();
             <?php foreach ($faculty as $f): ?>
             <div class="group overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10" data-reveal>
                 <div class="relative h-64 overflow-hidden">
-                    <img src="<?= asset('img/' . $f['photo']) ?>" alt="<?= e($f['name']) ?>" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-                    <span class="absolute left-3 top-3 rounded-full bg-gold-500 px-3 py-1 text-xs font-bold text-brand-950"><?= e($f['tag']) ?></span>
+                    <?php if (!empty($f['photo'])): ?>
+                        <img src="<?= url('/staff-photo/' . $f['id']) ?>" alt="<?= e($f['name']) ?>" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                    <?php else: ?>
+                        <span class="flex h-full w-full items-center justify-center bg-brand-600 text-xl font-black text-white"><?= e(strtoupper(substr($f['name'], 0, 1))) ?></span>
+                    <?php endif; ?>
+                    <span class="absolute left-3 top-3 rounded-full bg-gold-500 px-3 py-1 text-xs font-bold text-brand-950"><?= e($f['role']) ?></span>
                 </div>
                 <div class="p-5">
                     <h3 class="text-lg font-bold"><?= e($f['name']) ?></h3>
                     <p class="text-sm text-gold-300"><?= e($f['role']) ?></p>
-                    <p class="mt-3 text-sm text-brand-200"><?= e(mb_substr($f['bio'], 0, 96)) ?>…</p>
+                    <p class="mt-3 text-sm text-brand-200"><?= e(mb_substr((string) $f['bio'], 0, 96)) ?>…</p>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -195,9 +210,9 @@ $gallery = Content::gallery();
         <a href="<?= url('/activities') ?>" class="rounded-xl bg-brand-700 px-5 py-2.5 font-bold text-white hover:bg-brand-800">Tour the campus →</a>
     </div>
     <div class="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-        <?php foreach (array_slice($gallery, 0, 8) as $i => $g): ?>
+        <?php foreach ($galleryPhotos as $i => $p): ?>
         <a href="<?= url('/activities') ?>" class="group relative overflow-hidden rounded-2xl <?= $i === 0 ? 'col-span-2 row-span-2' : '' ?>" data-reveal>
-            <img src="<?= asset('img/' . $g) ?>" alt="Campus" loading="lazy" class="h-full w-full <?= $i === 0 ? 'min-h-[16rem]' : 'h-40 sm:h-44' ?> object-cover transition duration-500 group-hover:scale-110">
+            <img src="<?= url('/activity-image/' . $p['id']) ?>" alt="<?= e($p['caption'] ?: 'Campus') ?>" loading="lazy" class="h-full w-full <?= $i === 0 ? 'min-h-[16rem]' : 'h-40 sm:h-44' ?> object-cover transition duration-500 group-hover:scale-110">
             <div class="absolute inset-0 bg-brand-950/0 transition group-hover:bg-brand-950/30"></div>
         </a>
         <?php endforeach; ?>

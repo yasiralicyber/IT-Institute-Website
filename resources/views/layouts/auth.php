@@ -24,7 +24,7 @@
         <div class="relative flex h-full flex-col justify-between p-12 text-white">
             <a href="<?= url('/') ?>" class="flex items-center gap-3">
                 <span class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1">
-                    <img src="<?= asset('img/logo.jpg') ?>" alt="ITTI" class="h-full w-full object-contain">
+                    <img src="<?= url('/site-logo') ?>" alt="ITTI" class="h-full w-full object-contain">
                 </span>
                 <span class="text-lg font-extrabold">IT Training Institute</span>
             </a>

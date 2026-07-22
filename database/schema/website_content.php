@@ -40,4 +40,13 @@ return [
         is_published $BOOL NOT NULL DEFAULT 1,
         created_at $TS
     ",
+    'facilities' => "
+        id $PK,
+        title TEXT NOT NULL,
+        description TEXT,
+        image TEXT,
+        sort $INT DEFAULT 0,
+        is_published $BOOL NOT NULL DEFAULT 1,
+        created_at $TS
+    ",
 ];

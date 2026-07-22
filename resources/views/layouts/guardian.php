@@ -12,7 +12,7 @@
 <header class="bg-brand-900 text-white">
     <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
         <a href="<?= url('/') ?>" class="flex items-center gap-2.5">
-            <span class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-white p-0.5"><img src="<?= asset('img/logo.jpg') ?>" alt="ITTI" class="h-full w-full object-contain"></span>
+            <span class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-white p-0.5"><img src="<?= url('/site-logo') ?>" alt="ITTI" class="h-full w-full object-contain"></span>
             <span class="leading-tight"><span class="block text-sm font-extrabold">IT Training Institute</span><span class="block text-[10px] uppercase tracking-widest text-gold-300">Guardian Portal</span></span>
         </a>
         <?php if ($loggedIn): ?>

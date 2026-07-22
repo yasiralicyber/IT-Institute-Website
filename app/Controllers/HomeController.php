@@ -33,6 +33,8 @@ class HomeController extends Controller
             'reviews'    => $reviews,
             'heroSlides' => Database::all("SELECT * FROM hero_slides WHERE is_published=1 ORDER BY sort, id"),
             'awards'     => Database::all("SELECT * FROM awards WHERE is_published=1 ORDER BY sort, id LIMIT 4"),
+            'faculty'    => Database::all("SELECT * FROM staff WHERE is_published=1 ORDER BY sort, id LIMIT 3"),
+            'galleryPhotos' => Database::all("SELECT * FROM activity_photos WHERE is_published=1 ORDER BY sort, id LIMIT 8"),
         ]);
     }
 }

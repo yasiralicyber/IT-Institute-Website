@@ -16,8 +16,34 @@ class PageController extends Controller
     {
         $this->view('pages/faculty', [
             'title'   => 'Our Faculty - ' . config('app.name'),
-            'faculty' => \App\Content::faculty(),
+            'faculty' => Database::all("SELECT * FROM staff WHERE is_published=1 ORDER BY sort, id"),
         ]);
+    }
+
+    /** Stream a published staff photo (public). */
+    public function staffPhoto(array $params): void
+    {
+        $row = Database::first("SELECT photo FROM staff WHERE id=? AND is_published=1", [(int) ($params['id'] ?? 0)]);
+        $path = $row && $row['photo'] ? BASE_PATH . '/storage/uploads/' . $row['photo'] : '';
+        if (!$path || !is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
+    }
+
+    /** Stream the uploaded site logo, falling back to the bundled static logo (public). */
+    public function siteLogo(): void
+    {
+        $rel = setting('site_logo', '');
+        $path = $rel !== '' ? BASE_PATH . '/storage/uploads/' . $rel : BASE_PATH . '/public/assets/img/logo.jpg';
+        if (!is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
     }
 
     public function activities(): void
@@ -29,9 +55,22 @@ class PageController extends Controller
         unset($cat);
         $this->view('pages/activities', [
             'title'      => 'Activities & Campus - ' . config('app.name'),
-            'facilities' => \App\Content::facilities(),
+            'facilities' => Database::all("SELECT * FROM facilities WHERE is_published=1 ORDER BY sort, id"),
             'categories' => $categories,
         ]);
+    }
+
+    /** Stream a published facility image (public). */
+    public function facilityImage(array $params): void
+    {
+        $row = Database::first("SELECT image FROM facilities WHERE id = ? AND is_published = 1", [(int) ($params['id'] ?? 0)]);
+        $path = $row && $row['image'] ? BASE_PATH . '/storage/uploads/' . $row['image'] : '';
+        if (!$path || !is_file($path)) { http_response_code(404); exit; }
+        $mime = function_exists('finfo_open') ? finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path) : 'image/jpeg';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: public, max-age=86400');
+        readfile($path);
     }
 
     /** Old /campus URL — permanent redirect to the renamed Activities page. */

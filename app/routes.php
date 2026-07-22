@@ -30,6 +30,9 @@ $router->get('/courses/{slug}',   [CourseController::class, 'show']);
 
 $router->get('/about',            [PageController::class, 'about']);
 $router->get('/faculty',          [PageController::class, 'faculty']);
+$router->get('/staff-photo/{id}', [PageController::class, 'staffPhoto']);
+$router->get('/facility-image/{id}', [PageController::class, 'facilityImage']);
+$router->get('/site-logo',        [PageController::class, 'siteLogo']);
 $router->get('/activities',       [PageController::class, 'activities']);
 $router->get('/campus',           [PageController::class, 'campusRedirect']);
 $router->get('/activity-image/{id}', [PageController::class, 'activityImage']);

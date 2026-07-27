@@ -66,17 +66,35 @@ function fld($c, $k) { return $c[$k] ?? ''; }
                 </div>
                 <div class="divide-y divide-slate-100 dark:divide-white/5">
                     <?php foreach ($ch['lectures'] as $l): ?>
-                    <div class="flex items-center gap-3 px-4 py-2.5 text-sm">
-                        <span class="text-slate-400">▶</span>
-                        <span class="flex-1 text-slate-700 dark:text-slate-200"><?= e($l['title']) ?> <span class="text-xs text-slate-400">(<?= (int) $l['duration_min'] ?>m)</span></span>
-                        <?php if ((int) $l['is_free'] === 1): ?><span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">FREE</span><?php endif; ?>
-                        <?php if (str_starts_with((string) $l['video_url'], 'file:')): ?><span title="Uploaded video"></span><?php elseif ($l['video_url']): ?><span title="External video"></span><?php else: ?><span title="No video" class="text-amber-500"></span><?php endif; ?>
-                        <a href="/lectures/<?= (int) $l['id'] ?>/interactive" class="rounded bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300" title="Markers & in-video questions">Interactive</a>
-                        <form action="/lectures/<?= (int) $l['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this lecture?')">
+                    <details class="px-4 py-2.5 text-sm">
+                        <summary class="flex cursor-pointer items-center gap-3 list-none [&::-webkit-details-marker]:hidden">
+                            <span class="text-slate-400">▶</span>
+                            <span class="flex-1 text-slate-700 dark:text-slate-200"><?= e($l['title']) ?> <span class="text-xs text-slate-400">(<?= (int) $l['duration_min'] ?>m)</span></span>
+                            <?php if ((int) $l['is_free'] === 1): ?><span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">FREE</span><?php endif; ?>
+                            <?php if (!empty($l['description'])): ?><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-300" title="Has lesson notes">NOTES</span><?php endif; ?>
+                            <?php if (str_starts_with((string) $l['video_url'], 'file:')): ?><span title="Uploaded video"></span><?php elseif ($l['video_url']): ?><span title="External video"></span><?php else: ?><span title="No video" class="text-amber-500"></span><?php endif; ?>
+                            <a href="/lectures/<?= (int) $l['id'] ?>/interactive" class="rounded bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300" title="Markers & in-video questions">Interactive</a>
+                            <form action="/lectures/<?= (int) $l['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this lecture?')">
+                                <?= csrf_field() ?>
+                                <button class="text-red-500 hover:text-red-700">✕</button>
+                            </form>
+                        </summary>
+                        <form action="/lectures/<?= (int) $l['id'] ?>/update" method="POST" enctype="multipart/form-data" class="mt-3 space-y-2 rounded-xl bg-slate-50/50 p-3 dark:bg-white/5">
                             <?= csrf_field() ?>
-                            <button class="text-red-500 hover:text-red-700">✕</button>
+                            <div class="grid gap-2 sm:grid-cols-2">
+                                <input name="title" required value="<?= e($l['title']) ?>" placeholder="Lecture title" class="rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
+                                <input name="duration_min" type="number" value="<?= (int) $l['duration_min'] ?>" placeholder="Duration (min)" class="rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
+                            </div>
+                            <textarea name="description" rows="3" placeholder="Lesson notes shown to students on this lecture" class="w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white"><?= e($l['description'] ?? '') ?></textarea>
+                            <input name="video_url" value="<?= str_starts_with((string) $l['video_url'], 'file:') ? '' : e($l['video_url']) ?>" placeholder="Video URL (YouTube/Vimeo embed) - or upload a file below" class="w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
+                            <div class="flex flex-wrap items-center gap-3">
+                                <input type="file" name="video" accept="video/mp4,video/webm" class="text-xs">
+                                <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300" title="Drip: leave blank to release immediately"><input type="date" name="release_at" value="<?= e($l['release_at'] ?? '') ?>" class="rounded-lg border-slate-300 bg-white px-2 py-1 text-xs dark:border-white/15 dark:bg-slate-800 dark:text-white"></label>
+                                <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300"><input type="checkbox" name="is_free" value="1" <?= (int) $l['is_free'] === 1 ? 'checked' : '' ?> class="rounded text-brand-600"> Free preview</label>
+                                <button class="ml-auto rounded-lg bg-brand-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-brand-700">Save changes</button>
+                            </div>
                         </form>
-                    </div>
+                    </details>
                     <?php endforeach; ?>
                     <!-- Add lecture -->
                     <form action="/chapters/<?= (int) $ch['id'] ?>/lectures" method="POST" enctype="multipart/form-data" class="space-y-2 bg-slate-50/50 px-4 py-3 dark:bg-white/5">
@@ -85,6 +103,7 @@ function fld($c, $k) { return $c[$k] ?? ''; }
                             <input name="title" required placeholder="Lecture title" class="rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
                             <input name="duration_min" type="number" placeholder="Duration (min)" class="rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
                         </div>
+                        <textarea name="description" rows="2" placeholder="Lesson notes shown to students on this lecture (optional)" class="w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white"></textarea>
                         <input name="video_url" placeholder="Video URL (YouTube/Vimeo embed) - or upload a file below" class="w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
                         <div class="flex flex-wrap items-center gap-3">
                             <input type="file" name="video" accept="video/mp4,video/webm" class="text-xs">

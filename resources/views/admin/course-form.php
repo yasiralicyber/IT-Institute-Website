@@ -16,10 +16,10 @@ function fld($c, $k) { return $c[$k] ?? ''; }
             <input name="title" required value="<?= e(fld($course, 'title')) ?>" class="w-full rounded-xl border-slate-300 bg-white px-4 py-2.5 dark:border-white/15 dark:bg-slate-800 dark:text-white"></div>
         <div><label class="mb-1 block text-sm font-bold text-slate-700 dark:text-slate-200">Thumbnail</label>
             <?php if ($isEdit && !empty($course['thumbnail'])): ?>
-                <img src="/course-thumbnail/<?= (int) $course['id'] ?>" alt="" class="mb-2 h-24 w-40 rounded-xl object-cover ring-1 ring-slate-200">
+                <img src="/course-thumbnail/<?= (int) $course['id'] ?>" alt="" class="mb-2 aspect-video w-40 rounded-xl object-cover ring-1 ring-slate-200">
             <?php endif; ?>
             <input type="file" name="thumbnail" accept="image/*" class="w-full text-sm">
-            <p class="mt-1 text-xs text-slate-400">Leave blank to keep the current course image.</p>
+            <p class="mt-1 text-xs text-slate-400">Leave blank to keep the current course image. Recommended size: 1200 &times; 675px (16:9) so the image fills the card with no cropping.</p>
         </div>
         <div><label class="mb-1 block text-sm font-bold text-slate-700 dark:text-slate-200">Subtitle</label>
             <input name="subtitle" value="<?= e(fld($course, 'subtitle')) ?>" class="w-full rounded-xl border-slate-300 bg-white px-4 py-2.5 dark:border-white/15 dark:bg-slate-800 dark:text-white"></div>

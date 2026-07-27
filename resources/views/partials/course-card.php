@@ -10,7 +10,7 @@ $img = !empty($course['thumbnail'])
 <a href="<?= url('/courses/' . $course['slug']) ?>"
    data-reveal
    class="card-hover group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-2xl dark:border-white/10 dark:bg-slate-900/60">
-    <div class="relative h-44 overflow-hidden">
+    <div class="relative aspect-video overflow-hidden">
         <img src="<?= e($img) ?>" alt="<?= e($course['title']) ?>" loading="lazy"
              class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
         <div class="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/30 to-transparent"></div>

@@ -148,6 +148,35 @@ class LearnController extends Controller
         exit;
     }
 
+    /** Download the lecture's attached resource (an uploaded PDF, or redirect to an external URL). */
+    public function resource(array $params): void
+    {
+        $lecture = Database::first("SELECT * FROM lectures WHERE id = ?", [(int) ($params['lectureId'] ?? 0)]);
+        $resource = (string) ($lecture['resource_url'] ?? '');
+        if (!$lecture || $resource === '') { http_response_code(404); exit; }
+
+        if ((int) $lecture['is_free'] !== 1) {
+            $user = Auth::user();
+            if (!$user || !User::hasAccess((int) $user['id'], (int) $lecture['course_id'])
+                || !Progress::chapterUnlocked((int) $user['id'], (int) $lecture['course_id'], (int) $lecture['chapter_id'])) {
+                http_response_code(403); exit;
+            }
+        }
+
+        if (!str_starts_with($resource, 'file:')) {
+            header('Location: ' . $resource);
+            exit;
+        }
+
+        $file = BASE_PATH . '/storage/uploads/' . substr($resource, 5);
+        if (!is_file($file)) { http_response_code(404); exit; }
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . preg_replace('/[^a-z0-9-]+/i', '-', $lecture['title']) . '.pdf"');
+        header('Content-Length: ' . filesize($file));
+        readfile($file);
+        exit;
+    }
+
     /** Shared player renderer. */
     private function renderPlayer(array $course, array $lecture, ?array $user, bool $previewMode): void
     {

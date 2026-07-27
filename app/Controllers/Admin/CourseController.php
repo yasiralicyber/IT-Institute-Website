@@ -153,11 +153,12 @@ class CourseController extends Controller
         $title = trim((string) input('title', ''));
         if ($title !== '') {
             $video = $this->resolveVideo();
+            $resource = $this->resolveResource();
             $sort = (int) Database::scalar("SELECT COALESCE(MAX(sort),0) FROM lectures WHERE chapter_id = ?", [$chId]) + 1;
             Database::run(
-                "INSERT INTO lectures (chapter_id,course_id,title,description,video_url,duration_min,is_free,release_at,sort)
-                 VALUES (?,?,?,?,?,?,?,?,?)",
-                [$chId, $courseId, $title, input('description'), $video,
+                "INSERT INTO lectures (chapter_id,course_id,title,description,video_url,resource_url,duration_min,is_free,release_at,sort)
+                 VALUES (?,?,?,?,?,?,?,?,?,?)",
+                [$chId, $courseId, $title, input('description'), $video, $resource,
                  (int) input('duration_min'), input('is_free') ? 1 : 0, trim((string) input('release_at', '')) ?: null, $sort]);
             $this->recalcMinutes($courseId);
             flash('success', 'Lecture added.');
@@ -173,8 +174,9 @@ class CourseController extends Controller
         $lec = Database::first("SELECT * FROM lectures WHERE id = ?", [$id]);
         if ($lec) {
             $video = $this->resolveVideo($lec['video_url']);
-            Database::run("UPDATE lectures SET title=?,description=?,video_url=?,duration_min=?,is_free=?,release_at=? WHERE id=?",
-                [input('title', $lec['title']), input('description'), $video,
+            $resource = $this->resolveResource((string) ($lec['resource_url'] ?? ''));
+            Database::run("UPDATE lectures SET title=?,description=?,video_url=?,resource_url=?,duration_min=?,is_free=?,release_at=? WHERE id=?",
+                [input('title', $lec['title']), input('description'), $video, $resource,
                  (int) input('duration_min'), input('is_free') ? 1 : 0, trim((string) input('release_at', '')) ?: null, $id]);
             $this->recalcMinutes((int) $lec['course_id']);
             flash('success', 'Lecture updated.');
@@ -309,6 +311,15 @@ class CourseController extends Controller
         $file = store_upload('video', 'videos', ['mp4', 'webm', 'm4v'], 524_288_000);
         if ($file) { return 'file:' . $file; }
         $url = trim((string) input('video_url', ''));
+        return $url !== '' ? $url : $current;
+    }
+
+    /** Attached lesson resource (e.g. slides): an uploaded PDF, or a pasted URL. */
+    private function resolveResource(string $current = ''): string
+    {
+        $file = store_upload('resource', 'resources', ['pdf'], 10_485_760);
+        if ($file) { return 'file:' . $file; }
+        $url = trim((string) input('resource_url', ''));
         return $url !== '' ? $url : $current;
     }
 

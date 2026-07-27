@@ -95,6 +95,7 @@ $router->get('/learn/{slug}/{lectureId}/notes.txt', [LearnController::class, 'no
 $router->get('/learn/{slug}/{lectureId}', [LearnController::class, 'lecture']);
 // Protected video stream for self-hosted (uploaded) lectures - access-checked, no download header.
 $router->get('/media/{lectureId}', [LearnController::class, 'stream']);
+$router->get('/lecture-resource/{lectureId}', [LearnController::class, 'resource']);
 
 // ---- Community (Q&A) ----
 $router->get('/community',             [CommunityController::class, 'index']);

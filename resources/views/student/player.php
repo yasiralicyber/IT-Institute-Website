@@ -97,7 +97,7 @@ else { $practiceUrl = url('/playground'); $practiceLabel = 'Coding Playground'; 
         </div>
 
         <?php if ($lecture['description']): ?>
-        <p class="mt-4 text-slate-600"><?= e($lecture['description']) ?></p>
+        <p class="mt-4 whitespace-pre-line text-slate-600"><?= nl2br(e($lecture['description'])) ?></p>
         <?php endif; ?>
 
         <?php if (!empty($expired)): ?>
@@ -151,6 +151,7 @@ else { $practiceUrl = url('/playground'); $practiceLabel = 'Coding Playground'; 
             <button type="button" onclick="togglePanel('panel-labs',this)" class="<?= $tbtn ?>"><?= icon('rocket','h-4 w-4') ?> Lab &amp; Practice</button>
             <?php if ($hasAccess && !$preview): ?><button type="button" onclick="togglePanel('panel-notes',this)" class="<?= $tbtn ?>"><?= icon('note','h-4 w-4') ?> Notes &amp; Bookmarks</button><?php endif; ?>
             <a href="<?= url('/learn/' . $course['slug'] . '/' . (int) $lecture['id'] . '/notes.txt') ?>" class="<?= $tbtn ?>"><?= icon('save','h-4 w-4') ?> Download</a>
+            <?php if (!empty($lecture['resource_url'])): ?><a href="<?= url('/lecture-resource/' . (int) $lecture['id']) ?>" target="_blank" class="<?= $tbtn ?>"><?= icon('save','h-4 w-4') ?> Lesson Resource</a><?php endif; ?>
             <?php if ($hasAccess): ?><a href="<?= url('/learn/' . $course['slug'] . '/roadmap') ?>" class="<?= $tbtn ?>"><?= icon('chart','h-4 w-4') ?> Learning Path</a><?php endif; ?>
             <button type="button" onclick="toggleSaver()" id="saverBtn" class="<?= $tbtn ?>">Data Saver: <span id="saverState">Off</span></button>
         </div>

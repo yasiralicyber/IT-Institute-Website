@@ -72,6 +72,7 @@ function fld($c, $k) { return $c[$k] ?? ''; }
                             <span class="flex-1 text-slate-700 dark:text-slate-200"><?= e($l['title']) ?> <span class="text-xs text-slate-400">(<?= (int) $l['duration_min'] ?>m)</span></span>
                             <?php if ((int) $l['is_free'] === 1): ?><span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">FREE</span><?php endif; ?>
                             <?php if (!empty($l['description'])): ?><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 dark:bg-brand-500/10 dark:text-brand-300" title="Has lesson notes">NOTES</span><?php endif; ?>
+                            <?php if (!empty($l['resource_url'])): ?><span class="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-700 dark:bg-purple-500/10 dark:text-purple-300" title="Has a downloadable resource">RESOURCE</span><?php endif; ?>
                             <?php if (str_starts_with((string) $l['video_url'], 'file:')): ?><span title="Uploaded video"></span><?php elseif ($l['video_url']): ?><span title="External video"></span><?php else: ?><span title="No video" class="text-amber-500"></span><?php endif; ?>
                             <a href="/lectures/<?= (int) $l['id'] ?>/interactive" class="rounded bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300" title="Markers & in-video questions">Interactive</a>
                             <form action="/lectures/<?= (int) $l['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this lecture?')">
@@ -91,8 +92,15 @@ function fld($c, $k) { return $c[$k] ?? ''; }
                                 <input type="file" name="video" accept="video/mp4,video/webm" class="text-xs">
                                 <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300" title="Drip: leave blank to release immediately"><input type="date" name="release_at" value="<?= e($l['release_at'] ?? '') ?>" class="rounded-lg border-slate-300 bg-white px-2 py-1 text-xs dark:border-white/15 dark:bg-slate-800 dark:text-white"></label>
                                 <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300"><input type="checkbox" name="is_free" value="1" <?= (int) $l['is_free'] === 1 ? 'checked' : '' ?> class="rounded text-brand-600"> Free preview</label>
-                                <button class="ml-auto rounded-lg bg-brand-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-brand-700">Save changes</button>
                             </div>
+                            <div class="flex flex-wrap items-center gap-3 rounded-lg border border-dashed border-slate-300 p-2 dark:border-white/15">
+                                <input name="resource_url" value="<?= str_starts_with((string) ($l['resource_url'] ?? ''), 'file:') ? '' : e($l['resource_url'] ?? '') ?>" placeholder="Resource link (slides, PDF URL) - or upload a PDF" class="min-w-[220px] flex-1 rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
+                                <input type="file" name="resource" accept="application/pdf" class="text-xs">
+                                <?php if (str_starts_with((string) ($l['resource_url'] ?? ''), 'file:')): ?>
+                                    <a href="/lecture-resource/<?= (int) $l['id'] ?>" target="_blank" class="text-xs font-bold text-brand-600 hover:underline">Current file ↓</a>
+                                <?php endif; ?>
+                            </div>
+                            <button class="ml-auto block rounded-lg bg-brand-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-brand-700">Save changes</button>
                         </form>
                     </details>
                     <?php endforeach; ?>
@@ -109,8 +117,12 @@ function fld($c, $k) { return $c[$k] ?? ''; }
                             <input type="file" name="video" accept="video/mp4,video/webm" class="text-xs">
                             <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300" title="Drip: leave blank to release immediately"><input type="date" name="release_at" class="rounded-lg border-slate-300 bg-white px-2 py-1 text-xs dark:border-white/15 dark:bg-slate-800 dark:text-white"></label>
                             <label class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300"><input type="checkbox" name="is_free" value="1" class="rounded text-brand-600"> Free preview</label>
-                            <button class="ml-auto rounded-lg bg-brand-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-brand-700">+ Add lecture</button>
                         </div>
+                        <div class="flex flex-wrap items-center gap-3 rounded-lg border border-dashed border-slate-300 p-2 dark:border-white/15">
+                            <input name="resource_url" placeholder="Resource link (slides, PDF URL) - or upload a PDF" class="min-w-[220px] flex-1 rounded-lg border-slate-300 bg-white px-3 py-2 text-sm dark:border-white/15 dark:bg-slate-800 dark:text-white">
+                            <input type="file" name="resource" accept="application/pdf" class="text-xs">
+                        </div>
+                        <button class="ml-auto block rounded-lg bg-brand-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-brand-700">+ Add lecture</button>
                     </form>
                 </div>
             </div>

@@ -308,7 +308,7 @@ class CourseController extends Controller
     {
         // Prefer an uploaded MP4 (stored + streamed via the protected /media route);
         // otherwise accept a pasted embed/URL.
-        $file = store_upload('video', 'videos', ['mp4', 'webm', 'm4v'], 524_288_000);
+        $file = store_upload('video', 'videos', ['mp4', 'webm', 'm4v'], 1_073_741_824);
         if ($file) { return 'file:' . $file; }
         $url = trim((string) input('video_url', ''));
         return $url !== '' ? $url : $current;
@@ -317,7 +317,7 @@ class CourseController extends Controller
     /** Attached lesson resource (e.g. slides): an uploaded PDF, or a pasted URL. */
     private function resolveResource(string $current = ''): string
     {
-        $file = store_upload('resource', 'resources', ['pdf'], 10_485_760);
+        $file = store_upload('resource', 'resources', ['pdf'], 52_428_800);
         if ($file) { return 'file:' . $file; }
         $url = trim((string) input('resource_url', ''));
         return $url !== '' ? $url : $current;
